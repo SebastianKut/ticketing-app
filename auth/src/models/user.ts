@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Password } from '../utilities/password';
 
 // Properties that are required to create a new User
 interface UserAttrs {
@@ -30,6 +31,16 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+});
+// This is middleware that mongoose has that we can call before saving to database
+// done() works similar to next() in express, you have to call it in the callback function of this pre hook from mongoose to mark end of aynchronous operation
+userSchema.pre('save', async function (done) {
+  // Hashing password before saving to DB. isModified returns true to any new password as well. We dnt want to hash already hashed password
+  if (this.isModified('password')) {
+    const hashed = await Password.toHash(this.get('password'));
+    this.set('password', hashed);
+  }
+  done();
 });
 
 userSchema.statics.build = (attrs: UserAttrs) => {
