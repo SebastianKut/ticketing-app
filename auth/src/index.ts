@@ -36,6 +36,9 @@ app.all('/*', async () => {
 app.use(errorHandeler);
 
 const start = async () => {
+  if (!process.env.JWT_KEY) {
+    throw new Error('JWT_KEY must be defined');
+  }
   try {
     // auth in the url string is the name of the mongodb database if we dnt have it mongoose we will create one with that name
     await mongoose.connect('mongodb://auth-mongo-srv:27017/auth');

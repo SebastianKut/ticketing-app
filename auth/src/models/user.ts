@@ -22,16 +22,29 @@ interface UserDoc extends mongoose.Document {
   password: string;
 }
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    // with this code we get rid of properties that we dnt want to return when sending back user object to the client everytime we do res.send(user)
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+        delete ret.password;
+      },
+    },
+  }
+);
 // This is middleware that mongoose has that we can call before saving to database
 // done() works similar to next() in express, you have to call it in the callback function of this pre hook from mongoose to mark end of aynchronous operation
 userSchema.pre('save', async function (done) {
