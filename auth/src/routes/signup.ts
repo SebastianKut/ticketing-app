@@ -44,7 +44,6 @@ router.post(
     req.session = {
       jwt: userJwt,
     };
-
     // To transform JSON that we return to user we can modify it by adding toJSON property in schema definition in user.ts
     res.status(201).send(user);
   }

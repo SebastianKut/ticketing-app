@@ -18,11 +18,13 @@ app.use(
   cookieSession({
     // signed means encrypted cookie data, we dnt want that as its hard to decrypt data between different ;anguages incase we build other microservices using different languages, and JWT that will be used inside the cookie is safe already and encrypted
     signed: false,
-    // cookie is only to be sent over HTTPS
+    // cookie is only to be sent over HTTPS unless testing environment
     secure: process.env.NODE_ENV !== 'test',
+
+    // to test app through http we can uncomment
+    // secure: false,
   })
 );
-
 app.use(currentUserRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
