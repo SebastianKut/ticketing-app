@@ -7,8 +7,7 @@ import { currentUserRouter } from './routes/current-user';
 import { signinRouter } from './routes/signin';
 import { signupRouter } from './routes/signup';
 import { signoutRouter } from './routes/signout';
-import { errorHandeler } from './middlewares/error-handeler';
-import { NotFoundError } from './errors/not-found-error';
+import { errorHandeler, NotFoundError } from '@idigitalbeatzgittix/common';
 
 const app = express();
 // tell express to trust nginx proxy that we use for https connections

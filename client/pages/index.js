@@ -17,6 +17,7 @@ function index({ currentUser }) {
 // so we have to get that information from header of the request object that we get acces to in getInitialProps
 // context argument has request object so we can extract things from it like cookies and headers
 index.getInitialProps = async (context) => {
+  console.log('Landing page');
   const client = buildClient(context);
   const { data } = await client.get('/api/users/currentuser');
   return data;
