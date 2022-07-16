@@ -8,6 +8,9 @@ import {
   NotFoundError,
 } from '@idigitalbeatzgittix/common';
 import { createTicketRouter } from './routes/new';
+import { showTicketRouter } from './routes/show';
+import { indexTicketRouter } from './routes';
+import { updateTicketRouter } from './routes/update';
 
 const app = express();
 // tell express to trust nginx proxy that we use for https connections
@@ -30,6 +33,9 @@ app.use(
 app.use(currentUser);
 
 app.use(createTicketRouter);
+app.use(showTicketRouter);
+app.use(indexTicketRouter);
+app.use(updateTicketRouter);
 
 app.all('/*', async () => {
   throw new NotFoundError();

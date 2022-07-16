@@ -1,8 +1,7 @@
-import request from 'supertest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import { app } from '../app';
 import jwt from 'jsonwebtoken';
+import { generateMongoId } from './util/generate-id';
 
 // declaration of the global.signin that we are adding to use in tests
 declare global {
@@ -47,7 +46,7 @@ global.signin = () => {
   // so we will fake a cookie for tests - this is how auth middleware check if we are authenticated
   // Build JWT payload {id, email}
   const payload = {
-    id: '68486518gikgk73',
+    id: generateMongoId(),
     email: 'test@test.com',
   };
   // Create JWT
