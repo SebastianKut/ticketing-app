@@ -1,7 +1,9 @@
 import nats from 'node-nats-streaming';
 
 console.clear();
-// create client to connect to nats streaming server - in nats documentation its called stan
+// create client to connect to nats streaming server which runs in the pod - in nats documentation its called stan
+// connect takes client id as second argument which is helpful when you want to scale clients and run multiple copies.
+// each client (stan) has to have unique ID
 const stan = nats.connect('ticketing', 'abc', {
   // to get quick and easy acces to NATS Pod that runs in Kubernetes we can use 3 things (go through nginx, create nodePort or use port forwarding )
   // we will use port forwarding command is:
