@@ -51,6 +51,8 @@ process.on('SIGINT', () => stan.close());
 process.on('SIGTERM', () => stan.close());
 
 // Turn above logic into abstract class
+// abstract method allows us to tell typescript which properties have to be defined in the subclasses that extend this abstract class
+// by using word abstract
 abstract class Listener {
   abstract subject: string;
   abstract queueGroupName: string;
@@ -71,6 +73,7 @@ abstract class Listener {
       .setDurableName(this.queueGroupName);
   }
 
+  // this method will run all the logic in that we have defined in this class
   listen() {
     const subscription = this.client.subscribe(
       this.subject,
