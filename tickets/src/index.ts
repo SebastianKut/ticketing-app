@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import { app } from './app';
+// lower case for natsWrapper as its an instance of an object and not class definition
+import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
   // make sure we have JWT enviorment variable set
@@ -10,7 +12,7 @@ const start = async () => {
     throw new Error('MONGO_URI must be defined');
   }
   try {
-    // auth in the url string is the name of the mongodb database if we dnt have it mongoose we will create one with that name
+    await natsWrapper.connect('ticketing', 'hjfkhkhkk', 'http://nats-srv:4222');
     await mongoose.connect(process.env.MONGO_URI);
     console.log('Connected to MongoDB');
   } catch (err) {
