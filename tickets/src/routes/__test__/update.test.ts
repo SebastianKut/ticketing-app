@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { app } from '../../app';
+import { natsWrapper } from '../../nats-wrapper';
 import { generateMongoId } from '../../test/util/generate-id';
 
 it('returns a 404 if the provided id does not exist', async () => {
@@ -102,4 +103,27 @@ it('updates the ticket provided valid input ', async () => {
 
   expect(ticketResponse.body.title).toEqual('new title');
   expect(ticketResponse.body.price).toEqual(30);
+});
+
+it('publishes an event', async () => {
+  const userCookie = global.signin();
+
+  const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', userCookie)
+    .send({
+      title: 'title',
+      price: 20,
+    });
+
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', userCookie)
+    .send({
+      title: 'new title',
+      price: 30,
+    })
+    .expect(200);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

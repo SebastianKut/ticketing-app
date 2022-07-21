@@ -8,10 +8,16 @@ declare global {
   var signin: () => string[];
 }
 
+// instead of creating real instance of nats client in the test we will create a fake instance
+// by putting file with the same name as the one we are trying to fake in __mocks__ directory
+// then giving realtive path to the real file to jest.mock()
+jest.mock('../nats-wrapper');
+
 let mongo: any;
 // Specify what to do in beforeAll hook - runs before all of our tests
 
 beforeAll(async () => {
+  jest.clearAllMocks();
   // we need to specify JWT secret key because this only exists inside of our conteiner and not in the test environment
   process.env.JWT_KEY = 'asdfhh';
   mongo = await MongoMemoryServer.create();

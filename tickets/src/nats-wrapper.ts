@@ -10,6 +10,7 @@ class NatsWrapper {
 
   // _client is undefined until we call connect() but we have to expose this client to the outside world (for example we have to pass when publishing new event)
   // we can prevent client from being used inside of the getter
+  // to acces getter we just call natsWrapper.client
   get client() {
     if (!this._client) {
       throw new Error('Cannot access NATS client before connecting');
@@ -24,11 +25,12 @@ class NatsWrapper {
 
     // wrap event listener on "connect" with promise so we can use await
     return new Promise<void>((resolve, reject) => {
-      this._client!.on('connect', () => {
+      // we use this.client and not this._client! cuz we are accessing client through getter which means it will exist so dnt have t use ! to get rid of typescript warning
+      this.client.on('connect', () => {
         console.log('connected to NATS');
         resolve();
       });
-      this._client!.on('error', (err) => {
+      this.client.on('error', (err) => {
         reject(err);
       });
     });
