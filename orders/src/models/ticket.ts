@@ -5,6 +5,7 @@ import { Order, OrderStatus } from './order';
 // we only want certain properties on ticket inside our service, not all of them. There may be extra props on ticket collection in tickkets service
 
 interface TicketAttrs {
+  id: string;
   title: string;
   price: number;
 }
@@ -43,7 +44,13 @@ const ticketSchema = new mongoose.Schema(
 
 // This adds method to a model
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
-  return new Ticket(attrs);
+  // we want to have exactly the same ticket id that Tickets service has for the ticket in its database
+  // to avoid mongodb assigning random _id to our ticket we will have to assign it manually
+  return new Ticket({
+    _id: attrs.id,
+    title: attrs.title,
+    price: attrs.price,
+  });
 };
 
 // This adds method to a document (so each individual record)

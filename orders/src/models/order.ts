@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
 import { OrderStatus } from '@idigitalbeatzgittix/common';
+import mongoose from 'mongoose';
 import { TicketDoc } from './ticket';
 
 export { OrderStatus };
