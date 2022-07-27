@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { Order, OrderStatus } from './order';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 // this is a ticket model for orders service, essentially duplication of data so the service is independent from tickets and has all the data needed for tickets inside its own database
 // we only want certain properties on ticket inside our service, not all of them. There may be extra props on ticket collection in tickkets service
@@ -13,11 +14,16 @@ interface TicketAttrs {
 export interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
+  version: number;
   isReserved(): Promise<boolean>;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
   build(attr: TicketAttrs): TicketDoc;
+  findByEvent(event: {
+    id: string;
+    version: number;
+  }): Promise<TicketDoc | null>; //adding query to the model to find ticket by id and version so we can use in the listener
 }
 
 const ticketSchema = new mongoose.Schema(
@@ -42,6 +48,9 @@ const ticketSchema = new mongoose.Schema(
   }
 );
 
+ticketSchema.set('versionKey', 'version');
+ticketSchema.plugin(updateIfCurrentPlugin);
+
 // This adds method to a model
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
   // we want to have exactly the same ticket id that Tickets service has for the ticket in its database
@@ -50,6 +59,12 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
     _id: attrs.id,
     title: attrs.title,
     price: attrs.price,
+  });
+};
+ticketSchema.statics.findByEvent = (event: { id: string; version: number }) => {
+  return Ticket.findOne({
+    _id: event.id,
+    version: event.version - 1,
   });
 };
 
