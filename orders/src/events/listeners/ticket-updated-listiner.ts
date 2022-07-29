@@ -16,7 +16,7 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     if (!ticket) throw new Error('Ticket not Found');
     const { title, price } = data;
     ticket.set({ title, price });
-    await ticket.save(); //update-if-current plugin will match the version to the version that was just send to this listener
+    await ticket.save(); //update-if-current plugin will match the version to the version that was just send to this listener because findByEvent custom method returns ticket with the version -1 than the version of the ticket coming from the event
 
     msg.ack();
   }
