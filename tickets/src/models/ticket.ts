@@ -12,6 +12,7 @@ interface TicketDoc extends mongoose.Document {
   price: number;
   userId: string;
   version: number; // adding version so we can acces like ticket.version without typescript throwing an error, because we change it from __v
+  orderId?: string; // this is an optional property as orderId will not exist until there is an order for a ticket
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -31,6 +32,9 @@ const ticketSchema = new mongoose.Schema(
     userId: {
       type: String,
       required: true,
+    },
+    orderId: {
+      type: String,
     },
   },
   {
