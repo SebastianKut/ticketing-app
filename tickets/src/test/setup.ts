@@ -17,7 +17,6 @@ let mongo: any;
 // Specify what to do in beforeAll hook - runs before all of our tests
 
 beforeAll(async () => {
-  jest.clearAllMocks();
   // we need to specify JWT secret key because this only exists inside of our conteiner and not in the test environment
   process.env.JWT_KEY = 'asdfhh';
   mongo = await MongoMemoryServer.create();
@@ -29,6 +28,7 @@ beforeAll(async () => {
 // beforeEach runs before each of our tests
 // Delete all collections from our in memory instance of mongoDb
 beforeEach(async () => {
+  jest.clearAllMocks();
   const collections = await mongoose.connection.db.collections();
   for (let collection of collections) {
     await collection.deleteMany({});

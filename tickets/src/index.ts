@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import { app } from './app';
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener';
+import { OrderCreatedListener } from './events/listeners/order-created-listener';
 // lower case for natsWrapper as its an instance of an object and not class definition
 import { natsWrapper } from './nats-wrapper';
 
@@ -38,6 +40,9 @@ const start = async () => {
     // when we get termination or interrupt signal we close client manually
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
+
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
 
     // Connect to mongoDB
     await mongoose.connect(process.env.MONGO_URI);
