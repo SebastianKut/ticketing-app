@@ -7,6 +7,7 @@ import {
   errorHandeler,
   NotFoundError,
 } from '@idigitalbeatzgittix/common';
+import { createChargeRouter } from './routes/new';
 
 const app = express();
 // tell express to trust nginx proxy that we use for https connections
@@ -27,6 +28,8 @@ app.use(
 // check every incoming request if user is logged in, always after use(cookieSession) as it checks cookie for jwt
 // then every route we want user to be authenticated we just add requireAuth middleware to that specific route
 app.use(currentUser);
+
+app.use(createChargeRouter);
 
 app.all('/*', async () => {
   throw new NotFoundError();

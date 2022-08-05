@@ -5,7 +5,7 @@ import { generateMongoId } from './util/generate-id';
 
 // declaration of the global.signin that we are adding to use in tests
 declare global {
-  var signin: () => string[];
+  var signin: (id?: string) => string[];
 }
 
 // instead of creating real instance of nats client in the test we will create a fake instance
@@ -47,12 +47,12 @@ afterAll(async () => {
 // this will only be available in the test environment not in our express app and used inside tests
 // to sign up and return cookie
 
-global.signin = () => {
+global.signin = (id?: string) => {
   // We dnt want to make a request to auth service to log in as tickets service should be self contained
   // so we will fake a cookie for tests - this is how auth middleware check if we are authenticated
   // Build JWT payload {id, email}
   const payload = {
-    id: generateMongoId(),
+    id: id || generateMongoId(),
     email: 'test@test.com',
   };
   // Create JWT
