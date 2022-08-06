@@ -1,5 +1,3 @@
-import { buildClient } from '../api/build-client';
-
 function index({ currentUser }) {
   const message = currentUser
     ? `You are signed in as ${currentUser.email}`
@@ -16,11 +14,9 @@ function index({ currentUser }) {
 // when request to currentuser is executed on the server we dnt automatically pass session information with cookies like browser do
 // so we have to get that information from header of the request object that we get acces to in getInitialProps
 // context argument has request object so we can extract things from it like cookies and headers
-index.getInitialProps = async (context) => {
-  console.log('Landing page');
-  const client = buildClient(context);
-  const { data } = await client.get('/api/users/currentuser');
-  return data;
+index.getInitialProps = async (context, client, currentUser) => {
+  // by passing client and currentUser when invoking manually getInitialProps in _app component we now have access to it here
+  return {};
 };
 
 export default index;

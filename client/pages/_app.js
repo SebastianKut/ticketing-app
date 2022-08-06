@@ -7,7 +7,10 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
   return (
     <div>
       <Header currentUser={currentUser} />
-      <Component {...pageProps} />;
+      {/* Every component will now have access to currentUser in case component doesnt use getInitialProps to get currentUser from there we still have access to currentUser - to show component depending if user is logged in or not */}
+      <div className="container">
+        <Component {...pageProps} currentUser={currentUser} />;
+      </div>
     </div>
   );
 };
@@ -30,7 +33,13 @@ AppComponent.getInitialProps = async (appContext) => {
 
   if (appContext.Component.getInitialProps) {
     // whatever we returning from below getInitialProps will show up as pageProps argument to AppComponent
-    pageProps = await appContext.Component.getInitialProps(appContext.ctx);
+
+    // we can also pass client so we dnt have to use buildClient function everytime we wanna use axios, and currentUser so we have access to those in components getInitialProps function
+    pageProps = await appContext.Component.getInitialProps(
+      appContext.ctx,
+      client,
+      data.currentUser
+    );
   }
 
   console.log(pageProps);
