@@ -1,8 +1,35 @@
-function index({ currentUser }) {
-  const message = currentUser
-    ? `You are signed in as ${currentUser.email}`
-    : 'You are NOT signed in';
-  return <h1>{message}</h1>;
+import Link from 'next/link';
+
+function index({ currentUser, tickets }) {
+  const ticketList = tickets.map((ticket) => {
+    return (
+      <tr key={ticket.id}>
+        <td>{ticket.title}</td>
+        <td>{ticket.price}</td>
+        <td>
+          <Link href="/ticket/[ticketId]" as={`/tickets/${ticket.id}`}>
+            <a>View</a>
+          </Link>
+        </td>
+      </tr>
+    );
+  });
+
+  return (
+    <div>
+      <h1>Tickets</h1>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody>{ticketList}</tbody>
+      </table>
+    </div>
+  );
 }
 
 // getInitialProps gets executed on the server, apart from when we are already inside of our app so moving from another component or page
@@ -16,7 +43,9 @@ function index({ currentUser }) {
 // context argument has request object so we can extract things from it like cookies and headers
 index.getInitialProps = async (context, client, currentUser) => {
   // by passing client and currentUser when invoking manually getInitialProps in _app component we now have access to it here
-  return {};
+  const { data } = await client.get('/api/tickets');
+
+  return { tickets: data };
 };
 
 export default index;
