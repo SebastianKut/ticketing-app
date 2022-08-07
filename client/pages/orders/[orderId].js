@@ -36,6 +36,7 @@ function OrderShow({ order, currentUser }) {
     <div>
       Time left to pay: {timeLeft} seconds
       <StripeCheckout
+        // token is a callback function that gives us access to a token as an argument, then we can take an ID of a token and pass to the backend for charging a payment
         token={({ id }) => doRequest({ token: id })} //this will merge token and anything else in the body property of useRequest argument
         stripeKey="pk_test_51I7wrjLZv7WKvm6KLSx3FzeQ8fuxzQAdcH11QlQRFRY2qwPCmZzfOSegwCdXvofJzphwj9OjnJSqQyMOqnlio8sY00acMndlb8"
         amount={order.ticket.price * 100}
