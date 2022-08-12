@@ -9,7 +9,7 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
       <Header currentUser={currentUser} />
       {/* Every component will now have access to currentUser in case component doesnt use getInitialProps to get currentUser from there we still have access to currentUser - to show component depending if user is logged in or not */}
       <div className="container">
-        <Component {...pageProps} currentUser={currentUser} />;
+        <Component {...pageProps} currentUser={currentUser} />
       </div>
     </div>
   );

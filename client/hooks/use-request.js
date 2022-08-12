@@ -14,11 +14,12 @@ function useRequest({ url, method, body, onSuccess }) {
       }
       return response.data;
     } catch (err) {
+      console.log(err.message);
       setErrors(
         <div className="alert alert-danger">
           <h4>Oooops...</h4>
           <ul className="my-0">
-            {err.response.data.errors.map((err, index) => (
+            {err.response.data.errors?.map((err, index) => (
               <li key={index}>{err.message}</li>
             ))}
           </ul>

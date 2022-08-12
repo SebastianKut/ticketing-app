@@ -7,7 +7,7 @@ function index({ currentUser, tickets }) {
         <td>{ticket.title}</td>
         <td>{ticket.price}</td>
         <td>
-          <Link href="/ticket/[ticketId]" as={`/tickets/${ticket.id}`}>
+          <Link href="/tickets/[ticketId]" as={`/tickets/${ticket.id}`}>
             <a>View</a>
           </Link>
         </td>
