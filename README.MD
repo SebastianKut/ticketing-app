@@ -1,16 +1,5 @@
 # Ticketing app
 
-Write documentation of what it is, how it runs
-
-How to start it on your local machine with docker and Kubernetess and skaffold
-
-what version of docker and kubernetess and skaffold I am using, meantion that the common module is run as npm package,
-it requires a lot of resources and cpu power to run on local machine
-
-Just try to clone it and run it from scratch
-
-Mention about running tests before merging changes
-
 An open source framework for building e-commerce web app based on microservices. Written in Typescript using Express JS on the backend and Next JS on the client side (Javascript). It also utilises following technologies:
 
 - Docker
