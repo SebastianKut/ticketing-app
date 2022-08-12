@@ -47,9 +47,9 @@ function OrderShow({ order, currentUser }) {
   );
 }
 
-OrdertShow.getInitialProps = async (context, client) => {
-  const { ordertId } = context.query;
-  const { data } = await client.get(`/api/orders/${ordertId}`);
+OrderShow.getInitialProps = async (context, client) => {
+  const { orderId } = context.query;
+  const { data } = await client.get(`/api/orders/${orderId}`);
   return { order: data };
 };
 
