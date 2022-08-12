@@ -13,7 +13,8 @@ An open source framework for building e-commerce web app based on microservices.
 - Redis
 - Stripe
 
-Microservices communicate in an async fasion through NATS Streaming Server, by publishing and listening to events. Each service runs its own version of MongoDB. Everything runs on Docker and Kubernetess. There is certain amount of data duplication in order to keep each microservice independent.
+Microservices communicate in an async fasion through NATS Streaming Server, by publishing and listening to events. Each service runs its own version of MongoDB. Everything runs on Docker and Kubernetess.
+There is certain amount of data duplication in order to keep each microservice independent.
 The solution for concurency issues and events being processed in the wrong order, is an implementation of document versioning in mongoDB. Each published event will only be processed by another relevant service if the last saved record version was correct (published version minus 1).
 
 Common modules and shared code has been published as an npm library for an ease of use.
@@ -24,7 +25,8 @@ All services implement tests using JEST library. When creating a pull request gi
 
 ### Auth
 
-Auth service is responsible for authorisation and authentication. It consist of 4 routes - sign in, sign out, sign up which are self explanatory as well as current user route which checks if user is logged in and returns an instance of the user.
+Auth service is responsible for authorisation and authentication.
+It consist of 4 routes - sign in, sign out, sign up which are self explanatory as well as current user route which checks if user is logged in and returns an instance of the user.
 Authentication was build on Jason Web Token which is created when user signs up or signs in to the service, then it is passed to the client as a cookie.
 
 ### Expiration
@@ -41,14 +43,18 @@ show - returns order details given orderId as a query parameter
 delete - deletes the order
 
 Orders service implements 2 models: Order model and its own copy of Ticket model.
+
 It listens for following events:
 
 - ticket updated
 - ticket created
 - payment created
 - expiration complete
-  Then it process them accordingly.
-  Orders service also publishes following events:
+
+Then it process them accordingly.
+
+Orders service also publishes following events:
+
 - order created
 - order cancelled
 
@@ -93,16 +99,23 @@ Common module has been deployed to npm and it contains all shared code that is b
 
 ## Setup
 
-To run copy of this microservices app you need Docker, Kubernetess and Skaffold. Check officiall websites on guides of how to get these installed on your machine.
+To run copy of this microservices app you need Docker, Kubernetess and Skaffold as well as ingress-nginx. Check official websites on guides of how to get these installed on your machine.
 
-You need to clone this repository to your local machine and install all dependencies in each folder for further development. You will also need to implement your secret keys:
+Clone this repository to your local machine and install all dependencies in each services directory (auth, client etc) for further development.
+
+You will also need to implement your secret keys as environment variables:
 JWT_KEY - this can be any string that you want
-STRIPE_KEY - get this by creating an account with stripe.
+STRIPE_KEY - get this by creating an account with stripe. This is your stripe secret key.
 
 The command for deploying a key secret to kubernetess is:
+kubectl create secret generic <name-of-the-secret> —from-literal=<keyname>=<keyvalue>
 
-XXXXXXXXXXXXXXXX
+For example to set up JWT_KEY environment variable in kubernetess use following command:
+kubectl create secret generic jwt-secret —from-literal=JWT_KEY=somestring
 
-setup ticketing.dev to be insted of localhost 23791291
+You will also need to set up host file on your local machine to redirect requests to ticketing.dev domain to your localhost. On MacOS/Linux the host file is on /etc/hosts. You need to open this file in admin mode to be able to save changes. Inside host file put:
+127.0.0.1 ticketing.dev
 
-Check how to do this ^ and where is NATS_CLIENT_ID from. Check if theres anything else that needs to be setup etc
+To run start the app on your local machine make sure you are in the main directory where skaffold.yaml is located then type skaffold dev. Make sure that docker and kubernetess are running as well. Now you should be able to go to https://ticketing.dev to open the client.
+
+To run tests for each of the microservices make sure you are in the right directory and spin up test environment with npm run test.

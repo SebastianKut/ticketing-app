@@ -16,6 +16,7 @@ spec:
         - name: orders
           image: idigitalbeatz/orders
           env:
+            # NATS_CLIENT_ID gets its name from the name of the POD, it is always unique when deployment creates a POD it gives it unique ID and thats what we grabbing to assign to this env variable
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
