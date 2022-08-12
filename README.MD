@@ -43,10 +43,10 @@ Expiration services uses Bull Js and Redis to create and stores queues which are
 
 Responsible for handling orders. Orders service has 4 routes:
 
-new - responsible for creating a new order,
-index - responsible for showing all orders that belong to the user that is currently logged in
-show - returns order details given orderId as a query parameter
-delete - deletes the order
+- new - responsible for creating a new order,
+- index - responsible for showing all orders that belong to the user that is currently logged in
+- show - returns order details given orderId as a query parameter
+- delete - deletes the order
 
 Orders service implements 2 models: Order model and its own copy of Ticket model.
 
@@ -67,6 +67,7 @@ Orders service also publishes following events:
 ### Payments
 
 Paymets service is responsible for handling the payments. It implements Stripe. The overview of Stripe works as follows:
+
 Client service sends card details to Stripe -> Stripe sends back a token back to client after checking card details -> Client receives token from Stripe and sends token and orderId to Payments service -> Payments service creates a charge with Stripe, saves payment to its database and publishes payment created event.
 
 Payment service implements two models: Payment model and its own copy of Orders model. Not that not all the data from Orders model is duplicated from Orders service - only relevant data that Payments service requires.
