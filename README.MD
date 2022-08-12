@@ -68,9 +68,9 @@ Orders service also publishes following events:
 
 Paymets service is responsible for handling the payments. It implements Stripe. The overview of Stripe works as follows:
 
-Client service sends card details to Stripe -> Stripe sends back a token back to client after checking card details -> Client receives token from Stripe and sends token and orderId to Payments service -> Payments service creates a charge with Stripe, saves payment to its database and publishes payment created event.
+Client service sends card details to Stripe -> Stripe sends a token back to client after checking card details -> Client receives token from Stripe and sends token and orderId to Payments service -> Payments service creates a charge with Stripe, saves payment to its database and publishes payment created event.
 
-Payment service implements two models: Payment model and its own copy of Orders model. Not that not all the data from Orders model is duplicated from Orders service - only relevant data that Payments service requires.
+Payment service implements two models: Payment model and its own copy of Orders model. Note that not all the data from Orders model is duplicated from Orders service - only relevant data that Payments service requires.
 The following listeners are implemented in this service:
 
 - order cancelled
